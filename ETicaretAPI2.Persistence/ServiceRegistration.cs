@@ -17,13 +17,13 @@ namespace ETicaretAPI2.Persistence
   
         public static void AddPersistenceServices(this IServiceCollection services)
         {
-            services.AddDbContext<ETicaretAPI2DbContext>(options => options.UseNpgsql("User ID = postgres; Password = 123456; Host = localhost; Port = 5432; Database = ETicaretAPI2Db;"),ServiceLifetime.Singleton);
-            services.AddSingleton<ICustomerReadRepository,CustomerReadRepository>();
-            services.AddSingleton<ICustomerWriteRepository,CustomerWriteRepository>();
-            services.AddSingleton<IOrderReadRepository,OrderReadRepository>();
-            services.AddSingleton<IOrderWriteRepository,OrderWriteRepository>();
-            services.AddSingleton<IProductReadRepository,ProductReadRepository>();
-            services.AddSingleton<IProductWriteRepository,ProductWriteRepository>();
+            services.AddDbContext<ETicaretAPI2DbContext>(options => options.UseNpgsql("User ID = postgres; Password = 123456; Host = localhost; Port = 5432; Database = ETicaretAPI2Db;"));
+            services.AddScoped<ICustomerReadRepository,CustomerReadRepository>();
+            services.AddScoped<ICustomerWriteRepository,CustomerWriteRepository>();
+            services.AddScoped<IOrderReadRepository,OrderReadRepository>();
+            services.AddScoped<IOrderWriteRepository,OrderWriteRepository>();
+            services.AddScoped<IProductReadRepository,ProductReadRepository>();
+            services.AddScoped<IProductWriteRepository,ProductWriteRepository>();
         }
     }
 }

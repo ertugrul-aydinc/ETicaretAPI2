@@ -8,6 +8,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ETicaretAPI2.Persistence.Repositories
 {
@@ -22,24 +23,41 @@ namespace ETicaretAPI2.Persistence.Repositories
 
         public DbSet<T> Table => _context.Set<T>();
 
-        public IQueryable<T> GetAll()
+        public IQueryable<T> GetAll(bool tracking = true)
         {
-            return Table;
+            var query = Table.AsQueryable();
+
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
         }
 
-        public async Task<T> GetByIdAsync(string id)
+        public async Task<T> GetByIdAsync(string id, bool tracking = true)
         {
-            return await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+            //return await Table.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
+
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = Table.AsNoTracking();
+            return await query.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
         }
 
-        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter)
+        public async Task<T> GetSingleAsync(Expression<Func<T, bool>> filter, bool tracking = true)
         {
-            return await Table.Where(filter).FirstOrDefaultAsync(filter);
+            var query = Table.AsQueryable();
+            if (!tracking)
+                query = Table.AsNoTracking();
+            return await query.FirstOrDefaultAsync(filter);
         }
 
-        public IQueryable<T> GetWhere(Expression<Func<T, bool>> filter)
+        public IQueryable<T> GetWhere(Expression<Func<T, bool>> filter, bool tracking = true)
         {
-            return Table.Where(filter);
+            var query = Table.Where(filter);
+
+            if (!tracking)
+                query = query.AsNoTracking();
+            return query;
+            
         }
     }
 }
