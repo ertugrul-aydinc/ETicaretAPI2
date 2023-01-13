@@ -9,15 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{68F9F55E-2356-48C7-BC8A-2D4152E69BAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicaretAPI2.Application", "ETicaretAPI2.Application\ETicaretAPI2.Application.csproj", "{8F1E9979-7EEB-45B8-A9FC-C4ADE7B6BCE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETicaretAPI2.Application", "ETicaretAPI2.Application\ETicaretAPI2.Application.csproj", "{8F1E9979-7EEB-45B8-A9FC-C4ADE7B6BCE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicaretAPI2.Domain", "ETicaretAPI2.Domain\ETicaretAPI2.Domain.csproj", "{2500CB61-0B25-4952-A2B9-7D254BD6EDBF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETicaretAPI2.Domain", "ETicaretAPI2.Domain\ETicaretAPI2.Domain.csproj", "{2500CB61-0B25-4952-A2B9-7D254BD6EDBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicaretAPI2.Infrastructure", "ETicaretAPI2.Infrastructure\ETicaretAPI2.Infrastructure.csproj", "{E5FD07A0-1BE8-4D36-8DDA-1CF6CFB1FBD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETicaretAPI2.Infrastructure", "ETicaretAPI2.Infrastructure\ETicaretAPI2.Infrastructure.csproj", "{E5FD07A0-1BE8-4D36-8DDA-1CF6CFB1FBD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicaretAPI2.Persistence", "ETicaretAPI2.Persistence\ETicaretAPI2.Persistence.csproj", "{263369AE-199A-4B3A-B76C-03A0DA92B2D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETicaretAPI2.Persistence", "ETicaretAPI2.Persistence\ETicaretAPI2.Persistence.csproj", "{263369AE-199A-4B3A-B76C-03A0DA92B2D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ETicaretAPI2.API", "ETicaretAPI2.API\ETicaretAPI2.API.csproj", "{2E3E7F06-3736-4102-9268-AB12A957539D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ETicaretAPI2.API", "ETicaretAPI2.API\ETicaretAPI2.API.csproj", "{2E3E7F06-3736-4102-9268-AB12A957539D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

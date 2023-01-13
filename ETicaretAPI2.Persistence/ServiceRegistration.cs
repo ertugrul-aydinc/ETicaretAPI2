@@ -1,6 +1,10 @@
 ﻿using ETicaretAPI2.Application.Repositories;
+using ETicaretAPI2.Application.Repositories.ProductImageFile;
 using ETicaretAPI2.Persistence.Contexts;
 using ETicaretAPI2.Persistence.Repositories;
+using ETicaretAPI2.Persistence.Repositories.File;
+using ETicaretAPI2.Persistence.Repositories.InvoiceFile;
+using ETicaretAPI2.Persistence.Repositories.ProductImageFile;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,12 +22,24 @@ namespace ETicaretAPI2.Persistence
         public static void AddPersistenceServices(this IServiceCollection services)
         {
             services.AddDbContext<ETicaretAPI2DbContext>(options => options.UseNpgsql("User ID = postgres; Password = 123456; Host = localhost; Port = 5432; Database = ETicaretAPI2Db;"));
+
             services.AddScoped<ICustomerReadRepository,CustomerReadRepository>();
             services.AddScoped<ICustomerWriteRepository,CustomerWriteRepository>();
+
             services.AddScoped<IOrderReadRepository,OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository,OrderWriteRepository>();
+
             services.AddScoped<IProductReadRepository,ProductReadRepository>();
             services.AddScoped<IProductWriteRepository,ProductWriteRepository>();
-        }
+
+            services.AddScoped<IFileReadRepository, FileReadRepository>();
+            services.AddScoped<IFileWriteRepository, FileWriteRepository>();
+
+            services.AddScoped<IProductImageFileReadRepository, ProductImageFileReadRepository>();
+            services.AddScoped<IProductImageFileWriteRepository, ProductImageFileWriteRepository>();
+
+            services.AddScoped<IInvoiceFileReadRepository, InvoiceFileReadRepository>();
+            services.AddScoped<IInvoiceFileWriteRepository, InvoiceFileWriteRepository>();
+        }  
     }
 }
