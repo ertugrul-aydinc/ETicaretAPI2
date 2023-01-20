@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ETicaretAPI2.Persistence.Migrations
 {
     [DbContext(typeof(ETicaretAPI2DbContext))]
-    [Migration("20230113111357_mig_1")]
+    [Migration("20230117085439_mig_1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -64,6 +64,10 @@ namespace ETicaretAPI2.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Storage")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -148,6 +152,21 @@ namespace ETicaretAPI2.Persistence.Migrations
                     b.ToTable("OrderProduct");
                 });
 
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.Property<Guid>("ProductImageFilesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ProductsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("ProductImageFilesId", "ProductsId");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("ProductProductImageFile");
+                });
+
             modelBuilder.Entity("ETicaretAPI2.Domain.Entities.InvoiceFile", b =>
                 {
                     b.HasBaseType("ETicaretAPI2.Domain.Entities.File");
@@ -181,6 +200,21 @@ namespace ETicaretAPI2.Persistence.Migrations
                     b.HasOne("ETicaretAPI2.Domain.Entities.Order", null)
                         .WithMany()
                         .HasForeignKey("OrdersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ETicaretAPI2.Domain.Entities.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductProductImageFile", b =>
+                {
+                    b.HasOne("ETicaretAPI2.Domain.Entities.ProductImageFile", null)
+                        .WithMany()
+                        .HasForeignKey("ProductImageFilesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
