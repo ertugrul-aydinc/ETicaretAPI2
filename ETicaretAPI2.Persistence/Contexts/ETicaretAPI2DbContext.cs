@@ -1,15 +1,17 @@
 ﻿using ETicaretAPI2.Domain.Entities;
 using ETicaretAPI2.Domain.Entities.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ETicaretAPI2.Domain.Entities.Identity;
 
 namespace ETicaretAPI2.Persistence.Contexts
 {
-    public class ETicaretAPI2DbContext : DbContext
+    public class ETicaretAPI2DbContext : IdentityDbContext<AppUser,AppRole,string>
     {
         public ETicaretAPI2DbContext(DbContextOptions options) : base(options)
         { }

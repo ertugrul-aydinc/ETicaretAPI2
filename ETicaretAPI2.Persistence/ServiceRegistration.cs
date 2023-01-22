@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI2.Application.Repositories;
 using ETicaretAPI2.Application.Repositories.ProductImageFile;
+using ETicaretAPI2.Domain.Entities.Identity;
 using ETicaretAPI2.Persistence.Contexts;
 using ETicaretAPI2.Persistence.Repositories;
 using ETicaretAPI2.Persistence.Repositories.File;
@@ -21,6 +22,15 @@ namespace ETicaretAPI2.Persistence
   
         public static void AddPersistenceServices(this IServiceCollection services)
         {
+            services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+            }).AddEntityFrameworkStores<ETicaretAPI2DbContext>();
+
             services.AddDbContext<ETicaretAPI2DbContext>(options => options.UseNpgsql("User ID = postgres; Password = 123456; Host = localhost; Port = 5432; Database = ETicaretAPI2Db;"));
 
             services.AddScoped<ICustomerReadRepository,CustomerReadRepository>();
