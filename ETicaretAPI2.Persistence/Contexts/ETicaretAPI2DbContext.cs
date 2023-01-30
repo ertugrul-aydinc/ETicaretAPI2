@@ -22,6 +22,22 @@ namespace ETicaretAPI2.Persistence.Contexts
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
         public DbSet<Domain.Entities.File> Files { get; set; }
         public DbSet<InvoiceFile> InvoiceFiles { get; set; }
+        public DbSet<Basket> Baskets { get; set; }
+        public DbSet<BasketItem> BasketItems { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Order>()
+                .HasKey(o => o.Id);
+
+            builder.Entity<Basket>()
+                .HasOne(b => b.Order)
+                .WithOne(o => o.Basket)
+                .HasForeignKey<Order>(o => o.Id);
+
+            base.OnModelCreating(builder);
+        }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {

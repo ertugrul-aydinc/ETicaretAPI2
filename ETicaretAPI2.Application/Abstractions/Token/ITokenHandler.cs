@@ -1,4 +1,5 @@
 ﻿using ETicaretAPI2.Application.DTOs;
+using ETicaretAPI2.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace ETicaretAPI2.Application.Abstractions.Token
 {
     public interface ITokenHandler
     {
-        DTOs.Token CreateAccessToken(int minute);
+        DTOs.Token CreateAccessToken(int second, AppUser appUser);
+        string CreateRefreshToken();
     }
 }

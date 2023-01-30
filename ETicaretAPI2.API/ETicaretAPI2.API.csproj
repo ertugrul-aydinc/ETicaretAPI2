@@ -17,6 +17,10 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
+    <PackageReference Include="Serilog.Sinks.PostgreSQL" Version="2.3.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
@@ -24,9 +28,11 @@
     <ProjectReference Include="..\ETicaretAPI2.Application\ETicaretAPI2.Application.csproj" />
     <ProjectReference Include="..\ETicaretAPI2.Infrastructure\ETicaretAPI2.Infrastructure.csproj" />
     <ProjectReference Include="..\ETicaretAPI2.Persistence\ETicaretAPI2.Persistence.csproj" />
+    <ProjectReference Include="..\Infrastructure\ETicaretAPI2.SignalR\ETicaretAPI2.SignalR.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Middlewares\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
