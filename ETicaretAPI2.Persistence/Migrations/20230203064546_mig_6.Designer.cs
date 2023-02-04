@@ -3,6 +3,7 @@ using System;
 using ETicaretAPI2.Persistence.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ETicaretAPI2.Persistence.Migrations
 {
     [DbContext(typeof(ETicaretAPI2DbContext))]
-    partial class ETicaretAPI2DbContextModelSnapshot : ModelSnapshot
+    [Migration("20230203064546_mig_6")]
+    partial class mig6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,11 +245,10 @@ namespace ETicaretAPI2.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<Guid?>("CustomerId")
+                        .HasColumnType("uuid");
 
-                    b.Property<string>("OrderCode")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -255,8 +257,7 @@ namespace ETicaretAPI2.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderCode")
-                        .IsUnique();
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -461,6 +462,10 @@ namespace ETicaretAPI2.Persistence.Migrations
 
             modelBuilder.Entity("ETicaretAPI2.Domain.Entities.Order", b =>
                 {
+                    b.HasOne("ETicaretAPI2.Domain.Entities.Customer", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId");
+
                     b.HasOne("ETicaretAPI2.Domain.Entities.Basket", "Basket")
                         .WithOne("Order")
                         .HasForeignKey("ETicaretAPI2.Domain.Entities.Order", "Id")
@@ -542,6 +547,11 @@ namespace ETicaretAPI2.Persistence.Migrations
 
                     b.Navigation("Order")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ETicaretAPI2.Domain.Entities.Customer", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("ETicaretAPI2.Domain.Entities.Identity.AppUser", b =>
