@@ -4,10 +4,12 @@ using ETicaretAPI2.Application.DTOs;
 using ETicaretAPI2.Application.DTOs.Facebook;
 using ETicaretAPI2.Application.Exceptions;
 using ETicaretAPI2.Application.Features.Commands.AppUser.LoginUser;
+using ETicaretAPI2.Application.Helpers;
 using ETicaretAPI2.Domain.Entities.Identity;
 using Google.Apis.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -28,23 +30,26 @@ namespace ETicaretAPI2.Persistence.Services
         readonly ITokenHandler _tokenHandler;
         readonly SignInManager<Domain.Entities.Identity.AppUser> _signInManager;
         readonly IUserService _userService;
+        readonly IMailService _mailService;
 
-        public AuthService(IHttpClientFactory httpClientFactory,
-                           IConfiguration configuration,
-                           UserManager<Domain.Entities.Identity.AppUser> userManager,
-                           ITokenHandler tokenHandler,
-                           SignInManager<AppUser> signInManager,
-                           IUserService userService)
-        {
-            _httpClient = httpClientFactory.CreateClient();
-            _configuration = configuration;
-            _userManager = userManager;
-            _tokenHandler = tokenHandler;
-            _signInManager = signInManager;
-            _userService = userService;
-        }
+		public AuthService(IHttpClientFactory httpClientFactory,
+						   IConfiguration configuration,
+						   UserManager<Domain.Entities.Identity.AppUser> userManager,
+						   ITokenHandler tokenHandler,
+						   SignInManager<AppUser> signInManager,
+						   IUserService userService,
+						   IMailService mailService)
+		{
+			_httpClient = httpClientFactory.CreateClient();
+			_configuration = configuration;
+			_userManager = userManager;
+			_tokenHandler = tokenHandler;
+			_signInManager = signInManager;
+			_userService = userService;
+			_mailService = mailService;
+		}
 
-        async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
+		async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
         {
             bool result = user != null;
 
@@ -70,7 +75,7 @@ namespace ETicaretAPI2.Persistence.Services
             {
                 await _userManager.AddLoginAsync(user, info);
                 Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration,5);
+                await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration,5);
                 return token;
             }
 
@@ -134,7 +139,7 @@ namespace ETicaretAPI2.Persistence.Services
             if (result.Succeeded) //Authentication succeeded.
             {
                 Token token = _tokenHandler.CreateAccessToken(accessTokenLifeTime, user);
-                await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 15);
+                await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 15);
                 return token;
             }
 
@@ -148,12 +153,40 @@ namespace ETicaretAPI2.Persistence.Services
             if(user != null && user?.RefreshTokenEndDate > DateTime.UtcNow)
             {
                Token token = _tokenHandler.CreateAccessToken(15,user);
-               await _userService.UpdateRefreshToken(token.RefreshToken, user, token.Expiration, 300);
+               await _userService.UpdateRefreshTokenAsync(token.RefreshToken, user, token.Expiration, 300);
 
                 return token;
             }
             else
                 throw new NotFoundUserException();
         }
-    }
+
+		public async Task PasswordResetAsync(string email)
+		{
+            AppUser user = await _userManager.FindByEmailAsync(email);
+
+            if(user != null)
+            {
+                string resetToken = await 
+                    _userManager.GeneratePasswordResetTokenAsync(user);
+
+                resetToken = resetToken.UrlEncode();
+
+                await _mailService.SendPasswordResetMailAsync(email, user.Id, resetToken);
+            }
+		}
+
+		public async Task<bool> VerifyResetTokenAsync(string resetToken, string userId)
+		{
+           AppUser user = await _userManager.FindByIdAsync(userId);
+
+            if(user != null )
+            {
+                resetToken = resetToken.UrlDecode();
+
+                return await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword",resetToken);
+            }
+            return false;
+		}
+	}
 }

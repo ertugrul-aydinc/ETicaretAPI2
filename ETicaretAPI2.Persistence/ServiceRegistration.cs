@@ -9,6 +9,7 @@ using ETicaretAPI2.Persistence.Repositories.File;
 using ETicaretAPI2.Persistence.Repositories.InvoiceFile;
 using ETicaretAPI2.Persistence.Repositories.ProductImageFile;
 using ETicaretAPI2.Persistence.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,7 +33,8 @@ namespace ETicaretAPI2.Persistence
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<ETicaretAPI2DbContext>();
+            }).AddEntityFrameworkStores<ETicaretAPI2DbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddDbContext<ETicaretAPI2DbContext>(options => options.UseNpgsql("User ID = postgres; Password = 123456; Host = localhost; Port = 5432; Database = ETicaretAPI2Db;"));
 
@@ -59,6 +61,9 @@ namespace ETicaretAPI2.Persistence
 
             services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
             services.AddScoped<IBasketReadRepository, BasketReadRepository>();
+
+            services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
+            services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
