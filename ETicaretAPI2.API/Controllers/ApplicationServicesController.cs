@@ -1,4 +1,7 @@
 ﻿using ETicaretAPI2.Application.Abstractions.Services.Configurations;
+using ETicaretAPI2.Application.CustomAttributes;
+using ETicaretAPI2.Application.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,6 +9,7 @@ namespace ETicaretAPI2.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = "Admin")]
     public class ApplicationServicesController : ControllerBase
     {
         readonly IApplicationService _applicationService;
@@ -16,6 +20,7 @@ namespace ETicaretAPI2.API.Controllers
         }
 
         [HttpGet]
+        [AuthorizeDefiniton(ActionType = ActionType.Reading, Definition ="Get Authorize Definition Endpoints",Menu = "Application Services")]
         public IActionResult GetAuthorizeDefinitionEndpoints()
         {
             var datas =  _applicationService.GetAuthorizeDefinitionEndpoints(typeof(Program));
