@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ETicaretAPI2.Application\ETicaretAPI2.Application.csproj" />
     <ProjectReference Include="..\ETicaretAPI2.Domain\ETicaretAPI2.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\ETicaretAPI2.SignalR\ETicaretAPI2.SignalR.csproj" />
   </ItemGroup>
 
 </Project>
