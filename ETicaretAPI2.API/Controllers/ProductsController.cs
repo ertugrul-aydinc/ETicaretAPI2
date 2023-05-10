@@ -1,10 +1,12 @@
-﻿using ETicaretAPI2.Application.Abstractions.Storage;
+﻿using ETicaretAPI2.Application.Abstractions.Services;
+using ETicaretAPI2.Application.Abstractions.Storage;
 using ETicaretAPI2.Application.Consts;
 using ETicaretAPI2.Application.CustomAttributes;
 using ETicaretAPI2.Application.Enums;
 using ETicaretAPI2.Application.Features.Commands.Product.CreateProduct;
 using ETicaretAPI2.Application.Features.Commands.Product.RemoveProduct;
 using ETicaretAPI2.Application.Features.Commands.Product.UpdateProduct;
+using ETicaretAPI2.Application.Features.Commands.Product.UpdateStockQrCodeToProduct;
 using ETicaretAPI2.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage;
 using ETicaretAPI2.Application.Features.Commands.ProductImageFile.RemoveProductImage;
 using ETicaretAPI2.Application.Features.Commands.ProductImageFile.UploadProductImage;
@@ -31,9 +33,12 @@ namespace ETicaretAPI2.API.Controllers
 
         readonly IMediator _mediator;
 
-        public ProductsController(IMediator mediator)
+        readonly IProductService _productService;
+
+        public ProductsController(IMediator mediator, IProductService productService)
         {
             _mediator = mediator;
+            _productService = productService;
         }
 
         [HttpGet]
@@ -43,6 +48,24 @@ namespace ETicaretAPI2.API.Controllers
 
             return Ok(response);
         }
+
+        [HttpGet("qrcode/{productId}")]
+        public async Task<IActionResult> GetQrCodeToProduct([FromRoute] string productId)
+        {
+            var data = await _productService.QrCodeToProductAsync(productId);
+
+            return File(data, "image/png");
+        }
+
+        [HttpPut("qrcode")]
+        public async Task<IActionResult> UpdateStockQrCodeToProduct(UpdateStockQrCodeToProductCommandRequest updateStockQrCodeToProductCommandRequest)
+        {
+            UpdateStockQrCodeToProductCommandResponse response = await _mediator.Send(updateStockQrCodeToProductCommandRequest);
+
+            return Ok(response);
+        }
+
+
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get([FromRoute] GetByIdProductQueryRequest getByIdProductQueryRequest)

@@ -1,5 +1,6 @@
 using ETicaretAPI2.API.Configurations.ColumnWriters;
 using ETicaretAPI2.API.Extensions;
+using ETicaretAPI2.API.Filters;
 using ETicaretAPI2.Application;
 using ETicaretAPI2.Application.Validators.Products;
 using ETicaretAPI2.Infrastructure;
@@ -68,7 +69,11 @@ builder.Services.AddHttpLogging(logging =>
     logging.ResponseBodyLogLimit = 4096;
 });
 
-builder.Services.AddControllers(options => options.Filters.Add<ValidationFilter>())
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+    options.Filters.Add<RolePermissionFilter>();
+})
     .AddFluentValidation(configuration => configuration.RegisterValidatorsFromAssemblyContaining<CreateProductValidator>())
     .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
